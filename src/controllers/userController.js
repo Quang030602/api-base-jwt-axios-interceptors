@@ -1,7 +1,9 @@
-// Author: TrungQuanDev: https://youtube.com/@trungquandev
 import { StatusCodes } from 'http-status-codes'
 import ms from 'ms'
-import { JwtProvider } from '~/providers/JwtProvider'
+import { JwtProvider, 
+  ACCESS_TOKEN_SECRET_SIGNATURE, 
+  REFRESH_TOKEN_SECRET_SIGNATURE } 
+  from '~/providers/JwtProvider'
 /**
  * Mock nhanh thông tin user thay vì phải tạo Database rồi query.
  */

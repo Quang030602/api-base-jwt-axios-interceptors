@@ -1,4 +1,3 @@
-// Author: TrungQuanDev: https://youtube.com/@trungquandev
 
 /**
  * Để demo và tập trung vào đúng nội dung chính nên phần Cors này mình không config gì nhiều.
@@ -13,5 +12,5 @@ export const corsOptions = {
   optionsSuccessStatus: 200,
 
   // CORS sẽ cho phép nhận cookies từ request
-  // credentials: true
+  credentials: true
 }
