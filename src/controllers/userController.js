@@ -2,7 +2,9 @@ import { StatusCodes } from 'http-status-codes'
 import ms from 'ms'
 import { JwtProvider, 
   ACCESS_TOKEN_SECRET_SIGNATURE, 
-  REFRESH_TOKEN_SECRET_SIGNATURE } 
+  REFRESH_TOKEN_SECRET_SIGNATURE,
+  
+} 
   from '~/providers/JwtProvider'
 /**
  * Mock nhanh thông tin user thay vì phải tạo Database rồi query.
@@ -11,7 +13,7 @@ const MOCK_DATABASE = {
   USER: {
     ID: 'aimier-sample-id-12345678',
     EMAIL: 'minhquang030602@gmail.com',
-    PASSWORD: 'Quang030602'
+    PASSWORD: '030602'
   }
 }
 
@@ -21,14 +23,12 @@ const MOCK_DATABASE = {
  * làm Demo thôi nên mới đặt biến const và giá trị random ngẫu nhiên trong code nhé.
  * Xem thêm về biến môi trường: https://youtu.be/Vgr3MWb7aOw
  */
-const ACCESS_TOKEN_SECRET_SIGNATURE = 'KBgJwUETt4HeVD05WaXXI9V3JnwCVP'
-const REFRESH_TOKEN_SECRET_SIGNATURE = 'fcCjhnpeopVn2Hg1jG75MUi62051yL'
+
 
 const login = async (req, res) => {
   try {
     if (req.body.email !== MOCK_DATABASE.USER.EMAIL || req.body.password !== MOCK_DATABASE.USER.PASSWORD) {
-      res.status(StatusCodes.FORBIDDEN).json({ message: 'Your email or password is incorrect!' })
-      return
+      return res.status(StatusCodes.FORBIDDEN).json({ message: 'Your email or password is incorrect!' })
     }
 
     // Trường hợp nhập đúng thông tin tài khoản, tạo token và trả về cho phía Client
@@ -37,45 +37,44 @@ const login = async (req, res) => {
       email: MOCK_DATABASE.USER.EMAIL,
     }
     // tạo ra 2 loại token , accessToken và refreshToken
-    const accessToken = await JwtProvider.generateAccessToken(
+    const accessToken = await JwtProvider.generateToken(
       userInfo, 
       ACCESS_TOKEN_SECRET_SIGNATURE, 
       '1h',
     )
-    const refreshToken = await JwtProvider.generateAccessToken(
+    const refreshToken = await JwtProvider.generateToken(
       userInfo, 
       REFRESH_TOKEN_SECRET_SIGNATURE , 
       '14 days',
     )
-    res.cookie('accessToken',accessToken,{
+    res.cookie('accessToken', accessToken, {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
       maxAge: ms('1h')
     })
 
-    res.cookie('refreshToken',refreshToken,{
+    res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: 'none', 
-      maxAge: ms('1h')
+      maxAge: ms('14d')
     })
-// trả về thông tin user cũng như sẽ trả về Tokens cho trường hợp phía FE cần lưu Tokens vào stroage
-    res.status(StatusCodes.OK).json(
-      { 
-        ...userInfo, 
-        accessToken, 
-        refreshToken 
-      })
-
-    res.status(StatusCodes.OK).json({ message: 'Login API success!' })
+    // trả về thông tin user cũng như sẽ trả về Tokens cho trường hợp phía FE cần lưu Tokens vào storage
+    return res.status(StatusCodes.OK).json({
+      ...userInfo,
+      accessToken,
+      refreshToken
+    })
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error)
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error)
   }
 }
 
 const logout = async (req, res) => {
   try {
+    res.clearCookie('accessToken')
+    res.clearCookie('refreshToken')
     // Do something
     res.status(StatusCodes.OK).json({ message: 'Logout API success!' })
   } catch (error) {

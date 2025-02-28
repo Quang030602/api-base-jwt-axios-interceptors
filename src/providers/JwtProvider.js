@@ -6,10 +6,10 @@ import JWT from 'jsonwebtoken'
     tokenLife: Thời gian sống của token
 
 */ 
-const generateAccessToken = async(userInfo, sercretSignature, tokenLife) => {
+const generateToken = async(userInfo, sercretSignature, tokenLife) => {
     try {
 
-        return JWT.sign(userInfo, sercretSignature, {algorithm: 'SHA256',expiresIn: tokenLife})
+        return JWT.sign(userInfo, sercretSignature, {algorithm: 'HS256',expiresIn: tokenLife})
     }
     catch (error) {
         throw new Error(error)

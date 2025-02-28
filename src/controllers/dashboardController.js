@@ -2,14 +2,14 @@ import { StatusCodes } from 'http-status-codes'
 
 const access = async (req, res) => {
   try {
-    //const user = { email: 'minhquang030601@gmail.com' }
     const userInfo = {
       id: req.JWTDecoded.id,
       email: req.JWTDecoded.email
     }
     res.status(StatusCodes.OK).json(userInfo)
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error)
+    console.error('Error in dashboardController.access:', error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error', error })
   }
 }
 

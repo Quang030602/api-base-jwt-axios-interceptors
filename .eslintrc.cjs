@@ -10,10 +10,13 @@ module.exports = {
     requireConfigFile: false,
     allowImportExportEverywhere: true
   },
-  plugins: [],
+  plugins: [
+    "react",
+    "@typescript-eslint"
+  ],
   rules: {
     // Common
-    'no-console': 1,
+    'no-console': "off",
     'no-extra-boolean-cast': 0,
     'no-lonely-if': 1,
     'no-unused-vars': 1,
