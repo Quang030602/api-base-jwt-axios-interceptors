@@ -8,7 +8,6 @@ import { JwtProvider, ACCESS_TOKEN_SECRET_SIGNATURE } from '~/providers/JwtProvi
 const isAuthorized = async (req, res, next) => {
     // c1: lấy accessToken và refreshToken từ cookie
     const accessTokenFromCookie = req.cookies?.accessToken
-    const refreshTokenFromCookie = req.cookies?.refreshToken
     if (!accessTokenFromCookie) {
         return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Access Token is required.' })
     }
