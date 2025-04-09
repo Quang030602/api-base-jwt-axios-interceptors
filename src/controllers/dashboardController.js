@@ -4,7 +4,8 @@ const access = async (req, res) => {
   try {
     const userInfo = {
       id: req.JWTDecoded.id,
-      email: req.JWTDecoded.email
+      email: req.JWTDecoded.email,
+      role: req.JWTDecoded.role
     }
     res.status(StatusCodes.OK).json(userInfo)
   } catch (error) {

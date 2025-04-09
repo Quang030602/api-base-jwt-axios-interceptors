@@ -6,24 +6,19 @@ import { JwtProvider,
   
 } 
   from '~/providers/JwtProvider'
-/**
- * Mock nhanh thông tin user thay vì phải tạo Database rồi query.
- */
+const MOCK_ROLES = {
+  ADMIN: 'admin',
+  CLIENT: 'client',
+  MODERATOR: 'moderator',
+}
 const MOCK_DATABASE = {
   USER: {
     ID: 'aimier-sample-id-12345678',
     EMAIL: 'minhquang030602@gmail.com',
-    PASSWORD: '030602'
+    PASSWORD: '030602',
+    ROLE: MOCK_ROLES.ADMIN,
   }
 }
-
-/**
- * 2 cái chữ ký bí mật quan trọng trong dự án. Dành cho JWT - Jsonwebtokens
- * Lưu ý phải lưu vào biến môi trường ENV trong thực tế cho bảo mật.
- * làm Demo thôi nên mới đặt biến const và giá trị random ngẫu nhiên trong code nhé.
- * Xem thêm về biến môi trường: https://youtu.be/Vgr3MWb7aOw
- */
-
 
 const login = async (req, res) => {
   try {
@@ -35,6 +30,7 @@ const login = async (req, res) => {
     const userInfo = {
       id: MOCK_DATABASE.USER.ID,
       email: MOCK_DATABASE.USER.EMAIL,
+      role: MOCK_DATABASE.USER.ROLE
     }
     // tạo ra 2 loại token , accessToken và refreshToken
     const accessToken = await JwtProvider.generateToken(
@@ -94,6 +90,7 @@ const refreshToken = async (req, res) => {
     const userInfo = {
       id: refreshTokenDecoded.id,
       email: refreshTokenDecoded.email,
+      role: refreshTokenDecoded.role
     }
     const accessToken = await JwtProvider.generateToken(
       userInfo, 
